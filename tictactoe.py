@@ -106,7 +106,8 @@ class TicTacToe:
         :rtype: int
         """
         turn = 0
-        while not self.win:
+        cats = False
+        while not self.win and not cats:
             print(f"Player: {self.get_symbol(turn % self.players + 1)}")
             print(self.print_board)
             move = input(">> ").replace("(", "").replace(")", "").split(",")
@@ -123,9 +124,11 @@ class TicTacToe:
                     if valid:
                         turn += 1
                     print("")
+            if turn == len(self.board)**2:
+                cats = True
         print(f"Player {self.get_symbol(player=(turn - 1) % self.players + 1)} wins:")
         print(self.print_board)
-        return (turn - 1) % self.players + 1
+        return (turn - 1) % self.players + 1 if not cats else return 0
 
     def __make_move(self, player: int, position: tuple) -> bool:
         """
