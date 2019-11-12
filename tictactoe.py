@@ -30,30 +30,40 @@ class TicTacToe:
                 if player is not None:
                     if player == self.board[row][column + 1] == self.board[row][column + 2]:
                         # win horizontal
+                        print(33)
                         win = player
                     elif player == self.board[row + 1][column + 1] == self.board[row + 2][column + 2]:
                         # win down right
+                        print(37)
                         win = player
                     elif player == self.board[row + 1][column] == self.board[row + 2][column]:
                         # win vertical
+                        print(41)
                         win = player
                     elif player == self.board[row + 1][column - 1] == self.board[row + 2][column - 2]:
                         # win down left
+                        print(45)
                         win = player
                     if win:
                         break
-            # Check last 2 columns
-            if self.board[row][-2] == self.board[row + 1][-2] == self.board[row + 2][-2]:
-                # win vertical in second to last column
-                win = self.board[row][-2]
-            elif self.board[row][-1] == self.board[row + 1][-1] == self.board[row + 2][-1]:
-                # win vertical in last column
-                win = self.board[row][-1]
-            elif len(self.board) > 3 and self.board[row][-2] == self.board[row + 1][-3] == self.board[row + 2][-4]:
-                # win down left in second to last column
-                win = self.board[row][-2]
-            elif self.board[row][-1] == self.board[row + 1][-2] == self.board[row + 2][-3]:
-                win = self.board[row][-1]
+            if self.board[row][-2] is not None:
+                # Check last 2 columns
+                if self.board[row][-2] == self.board[row + 1][-2] == self.board[row + 2][-2]:
+                    # win vertical in second to last column
+                    print(53)
+                    win = self.board[row][-2]
+                elif len(self.board) > 3 and self.board[row][-2] == self.board[row + 1][-3] == self.board[row + 2][-4]:
+                    # win down left in second to last column
+                    print(57)
+                    win = self.board[row][-2]
+            if self.board[row][-1] is not None:
+                if self.board[row][-1] == self.board[row + 1][-1] == self.board[row + 2][-1]:
+                    # win vertical in last column
+                    print(62)
+                    win = self.board[row][-1]
+                elif self.board[row][-1] == self.board[row + 1][-2] == self.board[row + 2][-3]:
+                    print(65)
+                    win = self.board[row][-1]
             if win:
                 break
         # Check last 2 rows
@@ -63,11 +73,13 @@ class TicTacToe:
                 if player is not None:
                     if player == self.board[-1][column + 1] == self.board[-1][column + 2]:
                         # win horizontal
+                        print(74)
                         win = player
                 player = self.board[-2][column]
                 if player is not None:
                     if player == self.board[-2][column + 1] == self.board[-2][column + 2]:
                         # win horizontal
+                        print(80)
                         win = player
                 if win:
                     break
@@ -106,9 +118,9 @@ class TicTacToe:
         :rtype: int
         """
         turn = 0
-        while not self.win:
+        while not self.win():
             print(f"Player: {self.get_symbol(turn % self.players + 1)}")
-            print(self.print_board)
+            print(self.print_board())
             move = input(">> ").replace("(", "").replace(")", "").split(",")
             if len(move) != 2:
                 print("Please make a move in the form (x,y)")
@@ -124,7 +136,7 @@ class TicTacToe:
                         turn += 1
                     print("")
         print(f"Player {self.get_symbol(player=(turn - 1) % self.players + 1)} wins:")
-        print(self.print_board)
+        print(self.print_board())
         return (turn - 1) % self.players + 1
 
     def __make_move(self, player: int, position: tuple) -> bool:
@@ -163,3 +175,7 @@ class TicTacToe:
                 1: "X",
                 2: "O",
                 }[player]
+
+
+game = TicTacToe(2, 3)
+game.play()
