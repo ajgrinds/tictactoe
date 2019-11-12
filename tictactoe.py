@@ -119,7 +119,7 @@ class TicTacToe:
                 try:
                     move[0] = int(move[0])
                     move[1] = int(move[1])
-                except TypeError:
+                except (TypeError, ValueError):
                     print("Please use numbers in the form (x,y)")
                 else:
                     valid = self.__make_move(player=turn % self.players + 1, position=(move[0], move[1]))
