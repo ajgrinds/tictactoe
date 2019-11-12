@@ -128,7 +128,7 @@ class TicTacToe:
                 cats = True
         print(f"Player {self.get_symbol(player=(turn - 1) % self.players + 1)} wins:")
         print(self.print_board)
-        return (turn - 1) % self.players + 1 if not cats else return 0
+        return (turn - 1) % self.players + 1 if not cats else 0
 
     def __make_move(self, player: int, position: tuple) -> bool:
         """
