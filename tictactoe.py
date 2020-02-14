@@ -10,12 +10,22 @@ class TicTacToe:
         """
         self.board = self.new_board(board_size)
         self.players = players
+        self.moves = [[]] * players
+        self.winner = False
+        self.cats = False
 
     def __str__(self) -> str:
         """
         :rtype: str
         """
         return self.print_board()
+
+    def __eq__(self, other):
+        return other.board == self.board and other.players == self.players
+
+    @property
+    def turn(self):
+        return sum(len(x) for x in self.moves)
 
     def win(self) -> bool:
         """
@@ -107,32 +117,27 @@ class TicTacToe:
         :return: The player that won
         :rtype: int
         """
-        turn = 0
         cats = False
         while not self.win() and not cats:
-            print(f"Player: {self.get_symbol(turn % self.players + 1)}")
+            print(f"Player: {self.get_symbol(self.turn % self.players + 1)}")
             print(self.print_board())
-            move = input(">> ").replace("(", "").replace(")", "").split(",")
-            if len(move) != 2:
-                print("Please make a move in the form (x,y)")
+            try:
+                move = map(lambda x: int(x), input(">> ").replace("(", "").replace(")", "").split(","))
+            except (TypeError, ValueError):
+                print("Please use numbers in the form (x,y)")
             else:
-                try:
-                    move[0] = int(move[0])
-                    move[1] = int(move[1])
-                except (TypeError, ValueError):
-                    print("Please use numbers in the form (x,y)")
+                if len(move) != 2:
+                    print("Please make a move in the form (x,y)")
                 else:
-                    valid = self.__make_move(player=turn % self.players + 1, position=(move[0], move[1]))
-                    if valid:
-                        turn += 1
+                    valid = self.make_move(position=(move[0], move[1]))
                     print("")
-            if turn == len(self.board)**2:
+            if self.turn == len(self.board)**2:
                 cats = True
-        print(f"Player {self.get_symbol(player=(turn - 1) % self.players + 1)} wins!!")
+        print(f"Player {self.get_symbol(player=(self.turn - 1) % self.players + 1)} wins!!")
         print(self.print_board())
-        return (turn - 1) % self.players + 1 if not cats else 0
+        return (self.turn - 1) % self.players + 1 if not cats else 0
 
-    def __make_move(self, player: int, position: tuple) -> bool:
+    def make_move(self, position: tuple) -> bool:
         """
         Adds a move to the board. Should not be called
         :param player: The player who's move it is
@@ -142,6 +147,7 @@ class TicTacToe:
         :return: True if the move is legal
         :rtype: bool
         """
+        player = self.turn % self.players + 1
         valid = False
         if len(position) != 2:
             print("Please make a move in the form (x,y)")
@@ -152,6 +158,10 @@ class TicTacToe:
             else:
                 # move is legal
                 self.board[position[0] - 1][position[1] - 1] = self.get_symbol(player)
+                self.moves[player - 1].append((position[0], position[1]))
+                self.winner = self.win()
+                if self.turn == len(self.board)**2:
+                    self.cats = True
                 valid = True
         else:
             print(f"The bounds for this board are ({len(self.board)}, {len(self.board[0])})")
@@ -163,12 +173,12 @@ class TicTacToe:
 
     @staticmethod
     def get_symbol(player: int):
-        """Define symbols for players here. If not here just uses the number (what player: player does"""
+        """Define symbols for players here. If not here just uses the number (what player: symbol)"""
         return {player: player,
                 1: "X",
                 2: "O",
                 }[player]
 
-
-game = TicTacToe(2, 3)
-game.play()
+if __name__ == '__main__':
+    game = TicTacToe(2, 3)
+    game.play()
