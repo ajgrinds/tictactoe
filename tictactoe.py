@@ -165,7 +165,7 @@ class TicTacToe:
         return [[None for i in range(size)] for j in range(size)]
 
     @staticmethod
-    def get_symbol(player: int):
+    def get_symbol(player: int=None):
         """Define symbols for players here. If not here just uses the number (what player: player does)"""
         return {player: player,
                 False: "oops, the winner was false",
