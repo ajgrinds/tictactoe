@@ -35,19 +35,18 @@ def main():
     screen = pygame.display.set_mode(
         (SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
     game = TicTacToe(players=2)
-    square_size = GAME_WIDTH // len(game.board)
     game_offsetx, game_offsety = (
         SCREEN_WIDTH - GAME_WIDTH) / 2, (SCREEN_HEIGHT - GAME_HEIGHT) / 2
-    font = pygame.font.Font('freesansbold.ttf',  square_size - 10)
-    lil_font = pygame.font.Font('freesansbold.ttf', square_size // 3)
+    font = pygame.font.Font('freesansbold.ttf', GAME_WIDTH // len(game.board) - 10)
+    lil_font = pygame.font.Font('freesansbold.ttf', GAME_WIDTH // len(game.board) // 3)
     dark_mode = True
     dark_mode_img = pygame.transform.scale(pygame.image.load(
-        "darkmode.png"), (square_size // 2, square_size // 2))
-    dark_mode_button = Button((square_size * 3, 0), dark_mode_img)
+        "images/darkmode.png"), (GAME_WIDTH // len(game.board) // 2, GAME_WIDTH // len(game.board) // 2))
+    dark_mode_button = Button((GAME_WIDTH // len(game.board) * 3, 0), dark_mode_img)
     restart_img = pygame.transform.scale(pygame.image.load(
-        "restart.png"), (square_size // 10, square_size // 10))
+        "images/restart.png"), (GAME_WIDTH // len(game.board) // 10, GAME_WIDTH // len(game.board) // 10))
     restart_button = Button(
-        (square_size * 1.05, square_size * 0.15), restart_img)
+        (GAME_WIDTH // len(game.board) * 1.05, GAME_WIDTH // len(game.board) * 0.15), restart_img)
 
     game = TicTacToe(players=2)
 
@@ -79,6 +78,8 @@ def main():
                     SCREEN_WIDTH - GAME_WIDTH) / 2, (SCREEN_HEIGHT - GAME_HEIGHT) / 2
                 screen = pygame.display.set_mode(
                     (event.w, event.h), pygame.RESIZABLE)
+                font = pygame.font.Font('freesansbold.ttf', GAME_WIDTH // len(game.board) - 10)
+                lil_font = pygame.font.Font('freesansbold.ttf', GAME_WIDTH // len(game.board) // 3)
 
         screen.fill(colors["sidebar_color"])
         pygame.draw.rect(screen, colors["background_color"], pygame.Rect(
@@ -93,23 +94,23 @@ def main():
                 pos = i * (GAME_WIDTH // len(game.board)) + game_offsetx, j * \
                     (GAME_HEIGHT // len(game.board)) + game_offsety
                 x, y = pos
-                pygame.draw.rect(screen, (23, 23, 23), pygame.Rect(
-                    x, y, (GAME_WIDTH - GRID_GAP) // len(game.board), (GAME_HEIGHT - GRID_GAP) // len(game.board)))
+                box = pygame.Rect(x, y, (GAME_WIDTH - GRID_GAP) // len(game.board), (GAME_HEIGHT - GRID_GAP) // len(game.board))
+                pygame.draw.rect(screen, (23, 23, 23), box)
                 if spot == TicTacToe.get_symbol(1):
-                    screen.blit(x_label, pos)
+                    screen.blit(x_label, x_label.get_rect(center=box.center))
                 if spot == TicTacToe.get_symbol(2):
-                    screen.blit(o_label, pos)
+                    screen.blit(o_label, o_label.get_rect(center=box.center))
 
         if winner := game.win():
             screen.fill(colors["background_color"])
             winner_label = font.render(
                 TicTacToe.get_symbol(winner), True, colors["x_color"])
             winner_label_rect = winner_label.get_rect(
-                center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+                center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
             screen.blit(winner_label, winner_label_rect)
             text = lil_font.render("won the game!", True, colors["o_color"])
             text_rect = text.get_rect(
-                center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
+                center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
             screen.blit(text, text_rect)
 
         screen.blit(dark_mode_button.image, dark_mode_button.rect)
