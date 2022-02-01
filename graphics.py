@@ -14,7 +14,6 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     game = TicTacToe(players=2)
-    player = 1
 
     shutdown = False
     while not shutdown:
@@ -37,8 +36,7 @@ def main():
                 else:
                     row = 3
 
-                if game.make_move(player, (column, row)):
-                    player = 2 if player == 1 else 1
+                game.make_move((column, row))
 
         screen.fill((255, 255, 255))
         pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(SCREEN_WIDTH // 3 - 10, 0, 20, SCREEN_HEIGHT))

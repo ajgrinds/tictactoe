@@ -1,7 +1,12 @@
 from tictactoe import TicTacToe
 
 
-def get_move(board: TicTacToe):
+def get_move(board: TicTacToe) -> tuple[int, int]:
+    """
+    Gets the next move the engine would play in any scenario
+    :return: the move to be played in the form x,y
+    :rtype: tuple
+    """
     if board.turn == 0:
         return 1, 1
     elif board.turn == 2:
@@ -96,7 +101,7 @@ def play_x(board: TicTacToe) -> int:
             else:
                 valid = board.make_move(position=(next(move), next(move)))
                 print("")
-    print(f"Player {board.get_symbol(player=(board.turn - 1) % board.players + 1)} wins!!")
+    print(f"Player {board.get_symbol(player=board.winner)} wins!!")
     print(board.print_board())
     return (board.turn - 1) % board.players + 1 if not board.cats else 0
 

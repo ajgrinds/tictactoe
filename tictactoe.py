@@ -11,6 +11,8 @@ class TicTacToe:
         self.board = self.new_board(players + 1)
         self.players = players
         self.turn = 0
+        self.winner = False
+        self.cats = False
 
     def __str__(self) -> str:
         """
@@ -23,7 +25,6 @@ class TicTacToe:
         Scans the entire board to see if a player has won
         :rtype: bool
         """
-        win = False
         for row in range(len(self.board) - 2):
             # can't win vertically if there isn't three spots left
             for column in range(len(self.board[row]) - 2):
@@ -31,50 +32,50 @@ class TicTacToe:
                 if player is not None:
                     if player == self.board[row][column + 1] == self.board[row][column + 2]:
                         # win horizontal
-                        win = player
+                        self.winner = player
                     elif player == self.board[row + 1][column + 1] == self.board[row + 2][column + 2]:
                         # win down right
-                        win = player
+                        self.winner = player
                     elif player == self.board[row + 1][column] == self.board[row + 2][column]:
                         # win vertical
-                        win = player
+                        self.winner = player
                     elif player == self.board[row + 1][column - 1] == self.board[row + 2][column - 2]:
                         # win down left
-                        win = player
-                    if win:
+                        self.winner = player
+                    if self.winner:
                         break
             if self.board[row][-2] is not None:
                 # Check last 2 columns
                 if self.board[row][-2] == self.board[row + 1][-2] == self.board[row + 2][-2]:
                     # win vertical in second to last column
-                    win = self.board[row][-2]
+                    self.winner = self.board[row][-2]
                 elif len(self.board) > 3 and self.board[row][-2] == self.board[row + 1][-3] == self.board[row + 2][-4]:
                     # win down left in second to last column
-                    win = self.board[row][-2]
+                    self.winner = self.board[row][-2]
             if self.board[row][-1] is not None:
                 if self.board[row][-1] == self.board[row + 1][-1] == self.board[row + 2][-1]:
                     # win vertical in last column
-                    win = self.board[row][-1]
+                    self.winner = self.board[row][-1]
                 elif self.board[row][-1] == self.board[row + 1][-2] == self.board[row + 2][-3]:
-                    win = self.board[row][-1]
-            if win:
+                    self.winner = self.board[row][-1]
+            if self.winner:
                 break
         # Check last 2 rows
-        if not win:
+        if not self.winner:
             for column in range(len(self.board[-1]) - 2):
                 player = self.board[-1][column]
                 if player is not None:
                     if player == self.board[-1][column + 1] == self.board[-1][column + 2]:
                         # win horizontal
-                        win = player
+                        self.winner = player
                 player = self.board[-2][column]
                 if player is not None:
                     if player == self.board[-2][column + 1] == self.board[-2][column + 2]:
                         # win horizontal
-                        win = player
-                if win:
+                        self.winner = player
+                if self.winner:
                     break
-        return win
+        return self.winner
 
     def print_board(self) -> str:
         """
@@ -120,26 +121,25 @@ class TicTacToe:
                 except (TypeError, ValueError):
                     print("Please use numbers in the form (x,y)")
                 else:
-                    valid = self.make_move(player=self.turn % self.players + 1, position=(move[0], move[1]))
+                    valid = self.make_move(position=(move[0], move[1]))
                     if valid:
                         self.turn += 1
                     print("")
             if self.turn == len(self.board)**2:
-                cats = True
-        print(f"Player {self.get_symbol(player=(self.turn - 1) % self.players + 1)} wins!!")
+                self.cats = True
+        print(f"Player {self.winner} wins!!")
         print(self.print_board())
         return (self.turn - 1) % self.players + 1 if not cats else 0
 
-    def make_move(self, player: int, position: tuple) -> bool:
+    def make_move(self, position: tuple) -> bool:
         """
         Adds a move to the board. Should not be called
-        :param player: The player who's move it is
-        :type player: int
         :param position: The x,y position of the move
         :type position: tuple(int, int)
         :return: True if the move is legal
         :rtype: bool
         """
+        player = self.turn % self.players + 1
         valid = False
         if len(position) != 2:
             print("Please make a move in the form (x,y)")
@@ -150,6 +150,8 @@ class TicTacToe:
             else:
                 # move is legal
                 self.board[position[0] - 1][position[1] - 1] = self.get_symbol(player)
+                self.win()
+                self.turn += 1
                 valid = True
         else:
             print(f"The bounds for this board are ({len(self.board)}, {len(self.board[0])})")
@@ -163,6 +165,7 @@ class TicTacToe:
     def get_symbol(player: int):
         """Define symbols for players here. If not here just uses the number (what player: player does)"""
         return {player: player,
+                False: "oops, the winner was false",
                 1: "X",
                 2: "O"
                 }[player]
