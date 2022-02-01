@@ -1,14 +1,8 @@
-from tkinter import W
 import pygame
 from tictactoe import TicTacToe
 from colors import dark_colors, light_colors
 
 pygame.init()
-SCREEN_HEIGHT = 1080
-SCREEN_WIDTH = 1920
-GAME_WIDTH = 900
-GAME_HEIGHT = 900
-GRID_GAP = 30
 
 
 class Button:
@@ -33,13 +27,19 @@ class Button:
 
 
 def main():
+    SCREEN_HEIGHT = 1000
+    SCREEN_WIDTH = 1000
+    GAME_WIDTH = SCREEN_WIDTH // 2
+    GAME_HEIGHT = SCREEN_WIDTH // 2
+    GRID_GAP = 30
+    screen = pygame.display.set_mode(
+        (SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
     game = TicTacToe(players=2)
     square_size = GAME_WIDTH // len(game.board)
     game_offsetx, game_offsety = (
         SCREEN_WIDTH - GAME_WIDTH) / 2, (SCREEN_HEIGHT - GAME_HEIGHT) / 2
     font = pygame.font.Font('freesansbold.ttf',  square_size - 10)
     lil_font = pygame.font.Font('freesansbold.ttf', square_size // 3)
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     dark_mode = True
     dark_mode_img = pygame.transform.scale(pygame.image.load(
         "darkmode.png"), (square_size // 2, square_size // 2))
@@ -70,14 +70,22 @@ def main():
                 row = (y - int(game_offsety)) // (GAME_HEIGHT // 3) + 1
                 if 0 < column <= 3 and 0 < row <= 3:
                     game.make_move((column, row))
+            elif event.type == pygame.VIDEORESIZE:
+                SCREEN_HEIGHT = event.h
+                SCREEN_WIDTH = event.w
+                GAME_WIDTH = SCREEN_WIDTH // 2
+                GAME_HEIGHT = SCREEN_WIDTH // 2
+                game_offsetx, game_offsety = (
+                    SCREEN_WIDTH - GAME_WIDTH) / 2, (SCREEN_HEIGHT - GAME_HEIGHT) / 2
+                screen = pygame.display.set_mode(
+                    (event.w, event.h), pygame.RESIZABLE)
 
         screen.fill(colors["sidebar_color"])
         pygame.draw.rect(screen, colors["background_color"], pygame.Rect(
-            0, 0, SQUARE_SIZE, SQUARE_SIZE))
+            0, 0, SCREEN_WIDTH, SCREEN_HEIGHT))
 
         x_label = font.render(TicTacToe.get_symbol(1), True, colors["x_color"])
         o_label = font.render(TicTacToe.get_symbol(2), True, colors["o_color"])
-        screen.fill(background_color)
         screen.blit(dark_mode_button.image, dark_mode_button.rect)
 
         for i, row in enumerate(game.board):
