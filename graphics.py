@@ -110,7 +110,7 @@ def main():
         if winner := game.win():
             screen.fill(colors["background_color"])
             winner_label = font.render(
-                TicTacToe.get_symbol(winner), True, colors[2 // game.turn % game.players + 1])
+                TicTacToe.get_symbol(winner), True, colors[2 / (game.turn % game.players + 1)])
             winner_label_rect = winner_label.get_rect(
                 center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
             screen.blit(winner_label, winner_label_rect)
