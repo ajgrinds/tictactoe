@@ -3,8 +3,8 @@ from tictactoe import TicTacToe
 from colors import dark_colors, light_colors
 
 pygame.init()
-SCREEN_HEIGHT = 400
-SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 1080
+SCREEN_WIDTH = 1920
 SQUARE_SIZE = min(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 
@@ -34,6 +34,9 @@ def main():
     dark_mode_img = pygame.transform.scale(pygame.image.load("darkmode.png"), (SQUARE_SIZE // 10, SQUARE_SIZE // 10))
     dark_mode_button = Button((SQUARE_SIZE * 1.05, 0), dark_mode_img)
 
+    restart_img = pygame.transform.scale(pygame.image.load("restart.png"), (SQUARE_SIZE // 10, SQUARE_SIZE // 10))
+    restart_button = Button((SQUARE_SIZE * 1.05, SQUARE_SIZE * 0.15), restart_img)
+
     lines = [
         pygame.Rect(SQUARE_SIZE // 3 - SQUARE_SIZE // 100, SQUARE_SIZE // 50, SQUARE_SIZE // 50,
                     SQUARE_SIZE - SQUARE_SIZE // 50),
@@ -49,6 +52,8 @@ def main():
 
     shutdown = False
     while not shutdown:
+        if restart_button.clicked():
+            game.restart()
         if dark_mode_button.clicked():
             dark_mode = not dark_mode
         if dark_mode:
@@ -58,7 +63,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 shutdown = True
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN and not game.winner:
                 x, y = pygame.mouse.get_pos()
                 row = column = False
                 if x <= SQUARE_SIZE // 3:
@@ -81,8 +86,6 @@ def main():
         screen.fill(colors["sidebar_color"])
         pygame.draw.rect(screen, colors["background_color"], pygame.Rect(0, 0, SQUARE_SIZE, SQUARE_SIZE))
 
-        screen.blit(dark_mode_button.image, dark_mode_button.rect)
-
         x_label = font.render(TicTacToe.get_symbol(1), True, colors["x_color"])
         o_label = font.render(TicTacToe.get_symbol(2), True, colors["o_color"])
         for i, row in enumerate(game.board):
@@ -103,6 +106,9 @@ def main():
             text = lil_font.render("won the game!", True, colors["o_color"])
             text_rect = text.get_rect(center=(SQUARE_SIZE // 2, SQUARE_SIZE // 2))
             screen.blit(text, text_rect)
+
+        screen.blit(dark_mode_button.image, dark_mode_button.rect)
+        screen.blit(restart_button.image, restart_button.rect)
 
         pygame.display.flip()
 

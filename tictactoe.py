@@ -157,6 +157,9 @@ class TicTacToe:
             print(f"The bounds for this board are ({len(self.board)}, {len(self.board[0])})")
         return valid
 
+    def restart(self):
+        self.__init__(self.players)
+
     @staticmethod
     def new_board(size: int) -> list:
         return [[None for i in range(size)] for j in range(size)]
