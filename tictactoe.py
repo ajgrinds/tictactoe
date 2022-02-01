@@ -10,6 +10,7 @@ class TicTacToe:
         """
         self.board = self.new_board(players + 1)
         self.players = players
+        self.turn = 0
 
     def __str__(self) -> str:
         """
@@ -104,10 +105,10 @@ class TicTacToe:
         :return: The player that won
         :rtype: int
         """
-        turn = 0
+        self.turn = 0
         cats = False
         while not self.win() and not cats:
-            print(f"Player: {self.get_symbol(turn % self.players + 1)}")
+            print(f"Player: {self.get_symbol(self.turn % self.players + 1)}")
             print(self.print_board())
             move = input(">> ").replace("(", "").replace(")", "").split(",")
             if len(move) != 2:
@@ -119,17 +120,17 @@ class TicTacToe:
                 except (TypeError, ValueError):
                     print("Please use numbers in the form (x,y)")
                 else:
-                    valid = self.__make_move(player=turn % self.players + 1, position=(move[0], move[1]))
+                    valid = self.make_move(player=self.turn % self.players + 1, position=(move[0], move[1]))
                     if valid:
-                        turn += 1
+                        self.turn += 1
                     print("")
-            if turn == len(self.board)**2:
+            if self.turn == len(self.board)**2:
                 cats = True
-        print(f"Player {self.get_symbol(player=(turn - 1) % self.players + 1)} wins!!")
+        print(f"Player {self.get_symbol(player=(self.turn - 1) % self.players + 1)} wins!!")
         print(self.print_board())
-        return (turn - 1) % self.players + 1 if not cats else 0
+        return (self.turn - 1) % self.players + 1 if not cats else 0
 
-    def __make_move(self, player: int, position: tuple) -> bool:
+    def make_move(self, player: int, position: tuple) -> bool:
         """
         Adds a move to the board. Should not be called
         :param player: The player who's move it is
@@ -160,7 +161,7 @@ class TicTacToe:
 
     @staticmethod
     def get_symbol(player: int):
-        """Define symbols for players here. If not here just uses the number (what player: player does"""
+        """Define symbols for players here. If not here just uses the number (what player: player does)"""
         return {player: player,
                 1: "X",
                 2: "O"
@@ -168,6 +169,6 @@ class TicTacToe:
 
 
 if __name__ == '__main__':
-    players = input("How many players? ")
-    game = TicTacToe(players=int(players))
+    num_players = input("How many players? ")
+    game = TicTacToe(players=int(num_players))
     game.play()
