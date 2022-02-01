@@ -13,6 +13,7 @@ class TicTacToe:
         self.turn = 0
         self.winner = False
         self.cats = False
+        self.moves = []
 
     def __str__(self) -> str:
         """
@@ -122,8 +123,6 @@ class TicTacToe:
                     print("Please use numbers in the form (x,y)")
                 else:
                     valid = self.make_move(position=(move[0], move[1]))
-                    if valid:
-                        self.turn += 1
                     print("")
             if self.turn == len(self.board)**2:
                 self.cats = True
@@ -150,6 +149,7 @@ class TicTacToe:
             else:
                 # move is legal
                 self.board[position[0] - 1][position[1] - 1] = self.get_symbol(player)
+                self.moves.append(position)
                 self.win()
                 self.turn += 1
                 valid = True

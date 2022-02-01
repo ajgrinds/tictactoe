@@ -1,23 +1,34 @@
 from tictactoe import TicTacToe
 
 
+class NotTwoPlayerGameError(Exception):
+    pass
+
+
 def get_move(board: TicTacToe) -> tuple[int, int]:
     """
     Gets the next move the engine would play in any scenario
     :return: the move to be played in the form x,y
     :rtype: tuple
     """
+    if not board.players == 2:
+        raise NotTwoPlayerGameError("The game must be 2 player if you want to use the engine")
     if board.turn == 0:
         return 1, 1
-    elif board.turn == 2:
-        if (2, 1) in board.moves[1] or (3, 1) in board.moves[1]:
-            return 1, 2
-        elif (2, 3) in board.moves[1]:
-            return 2, 2
-        elif (3, 3) in board.moves[1] or (2, 3) in board.moves[1]:
-            return 1, 3
+    elif board.turn == 1:
+        if (2, 2) == board.moves[1]:
+            return 1, 1
         else:
-            return 2, 1
+            return 2, 2
+    elif board.turn == 2:
+        if (2, 1) == board.moves[1] or (1, 2) == board.moves[1] or (2, 3) == board.moves[1] or (3, 2) == board.moves[1]:
+            return 2, 2
+        elif (3, 1) == board.moves[1]:
+            return 1, 3
+        elif (1, 3) == board.moves[1] or (3, 3) == board.moves[1]:
+            return 3, 1
+        else:
+            return 3, 3
     elif board.turn == 4:
         if (1, 2) in board.moves[0]:
             if (1, 3) in board.moves[1]:
@@ -89,17 +100,18 @@ def play_x(board: TicTacToe) -> int:
     """
     while not board.winner and not board.cats:
         board.make_move(position=get_move(board))
-        print(f"Player: {board.get_symbol(board.turn % board.players + 2)}")
+        print(f"Player: {board.get_symbol(board.turn % board.players + 1)}")
         print(board.print_board())
         try:
-            move = map(lambda x: int(x), input(">> ").replace("(", "").replace(")", "").split(","))
+            move = list(map(lambda x: int(x), input(">> ").replace("(", "").replace(")", "").split(",")))
         except (TypeError, ValueError):
             print("Please use numbers in the form (x,y)")
         else:
-            if len(list(move)) != 2:
+            if len(move) != 2:
                 print("Please make a move in the form (x,y)")
             else:
-                valid = board.make_move(position=(next(move), next(move)))
+                while not board.make_move(position=tuple(move)):
+                    move = list(map(lambda x: int(x), input(">> ").replace("(", "").replace(")", "").split(",")))
                 print("")
     print(f"Player {board.get_symbol(player=board.winner)} wins!!")
     print(board.print_board())
