@@ -33,15 +33,19 @@ class TicTacToe:
                 if player is not None:
                     if player == self.board[row][column + 1] == self.board[row][column + 2]:
                         # win horizontal
+                        print(36)
                         self.winner = player
                     elif player == self.board[row + 1][column + 1] == self.board[row + 2][column + 2]:
                         # win down right
+                        print(40)
                         self.winner = player
                     elif player == self.board[row + 1][column] == self.board[row + 2][column]:
                         # win vertical
+                        print(44)
                         self.winner = player
                     elif player == self.board[row + 1][column - 1] == self.board[row + 2][column - 2]:
                         # win down left
+                        print(48)
                         self.winner = player
                     if self.winner:
                         break
@@ -49,15 +53,19 @@ class TicTacToe:
                 # Check last 2 columns
                 if self.board[row][-2] == self.board[row + 1][-2] == self.board[row + 2][-2]:
                     # win vertical in second to last column
+                    print(56)
                     self.winner = self.board[row][-2]
                 elif len(self.board) > 3 and self.board[row][-2] == self.board[row + 1][-3] == self.board[row + 2][-4]:
                     # win down left in second to last column
+                    print(60)
                     self.winner = self.board[row][-2]
             if self.board[row][-1] is not None:
                 if self.board[row][-1] == self.board[row + 1][-1] == self.board[row + 2][-1]:
                     # win vertical in last column
+                    print(65)
                     self.winner = self.board[row][-1]
                 elif self.board[row][-1] == self.board[row + 1][-2] == self.board[row + 2][-3]:
+                    print(68)
                     self.winner = self.board[row][-1]
             if self.winner:
                 break
@@ -68,11 +76,13 @@ class TicTacToe:
                 if player is not None:
                     if player == self.board[-1][column + 1] == self.board[-1][column + 2]:
                         # win horizontal
+                        print(79)
                         self.winner = player
                 player = self.board[-2][column]
                 if player is not None:
                     if player == self.board[-2][column + 1] == self.board[-2][column + 2]:
                         # win horizontal
+                        print(85)
                         self.winner = player
                 if self.winner:
                     break

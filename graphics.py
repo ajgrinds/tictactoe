@@ -65,22 +65,10 @@ def main():
                 shutdown = True
             elif event.type == pygame.MOUSEBUTTONDOWN and not game.winner:
                 x, y = pygame.mouse.get_pos()
-                row = column = False
-                if x <= SQUARE_SIZE // 3:
-                    column = 1
-                elif SQUARE_SIZE // 3 < x <= 2 * SQUARE_SIZE // 3:
-                    column = 2
-                elif 2 * SQUARE_SIZE // 3 < x <= SQUARE_SIZE:
-                    column = 3
+                column = x // (SQUARE_SIZE // 3) + 1
+                row = y // (SQUARE_SIZE // 3) + 1
 
-                if y <= SQUARE_SIZE // 3:
-                    row = 1
-                elif SQUARE_SIZE // 3 < y <= 2 * SQUARE_SIZE // 3:
-                    row = 2
-                elif 2 * SQUARE_SIZE // 3 < y <= SQUARE_SIZE:
-                    row = 3
-
-                if column and row:
+                if 0 < column <= 3 and 0 < row <= 3:
                     game.make_move((column, row))
 
         screen.fill(colors["sidebar_color"])
