@@ -3,20 +3,16 @@ from states.game_state import GameState
 from states.win_state import WinState
 from states.title_state import TitleState
 from colors import dark_colors
+from config import all_symbols
 
 pygame.init()
 pygame.mixer.init()
+print()
+print()
 
 pygame_icon = pygame.image.load('assets/images/tictac.png')
 pygame.display.set_icon(pygame_icon)
 pygame.display.set_caption("Tic Tac Toe")
-
-
-class Game:
-
-
-    def __init__(self, dark_mode=True):
-        self.dark_mode = dark_mode
 
 
 class Button(pygame.sprite.Sprite):
@@ -49,6 +45,14 @@ class Button(pygame.sprite.Sprite):
 
 
 def main():
+    print("Sorry, I havent made this part digital yet...")
+    while not (num_players := input("How many players would you like?\n>>> ")).isdigit():
+        if num_players > len(all_symbols):
+            print("I thought of everything... can't fool me")
+        else:
+            print("Come on now, already trying to break it. Try again.")
+    print("Okay, look for the pygame window")
+
     # game config variables
     height = 1000
     width = 1000
@@ -69,7 +73,7 @@ def main():
     states = {
         "title": TitleState(),
         "win": WinState(),
-        "game": GameState(players=2)
+        "game": GameState(players=int(num_players))
     }
 
     current_state = states["title"]

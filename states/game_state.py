@@ -93,10 +93,16 @@ class GameState(BaseState):
                                         True, font_color)
                     screen.blit(label, label.get_rect(center=box.center))
 
-        #player_label = self.liler_font.render(f"Player: {TicTacToe.get_symbol(self.game.turn % self.game.players + 1)}", True,
-        #                                 self.persist["colors"].get(
-       #                                      "{}_color".format(TicTacToe.get_symbol(self.game.turn % self.game.players + 1))))
-        #screen.blit(player_label, player_label.get_rect(center=(screen.get_width() // 2, 30)))
+        current_player = self.game.get_current_player()
+        if not TicTacToe.get_symbol(current_player):
+            symbols[current_player] = random_symbol()
+
+        font_color = self.persist["colors"].get("{}_color".format(symbols[current_player].lower()))
+        if not font_color:
+            self.persist["colors"]["{}_color".format(symbols[current_player].lower())] = random_color()
+            font_color = self.persist["colors"].get("{}_color".format(symbols[current_player].lower()))
+        player_label = self.liler_font.render(f"Player: {symbols[current_player]}", True, font_color)
+        screen.blit(player_label, player_label.get_rect(center=(screen.get_width() // 2, 30)))
 
         screen.blit(self.persist["dark_mode_button"].image,  self.persist["dark_mode_button"].rect)
         screen.blit(self.persist["restart_button"].image, self.persist["restart_button"].rect)
@@ -118,8 +124,7 @@ class GameState(BaseState):
                     current_player = self.game.get_current_player()
                     if not TicTacToe.get_symbol(current_player):
                         symbols[current_player] = random_symbol()
-                    unoccupiedSquare = self.game.make_move((column, row))
-                    if not unoccupiedSquare:
+                    if not self.game.make_move((column, row)):
                         pygame.mixer.Sound(
                             "assets/sounds/explosion.wav").play()
                     else:
