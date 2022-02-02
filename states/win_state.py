@@ -14,6 +14,7 @@ class WinState(BaseState):
         self.font = 0
         self.lil_font = 0
         self.liler_font = 0
+        self.played = False
 
     @property
     def square_size(self):
@@ -50,5 +51,7 @@ class WinState(BaseState):
         screen.blit(text, text_rect)
 
     def update(self, screen):
-        pygame.mixer.Sound("assets/sounds/win.wav").play()
+        if not self.played:
+            pygame.mixer.Sound("assets/sounds/win.wav").play()
+            self.played = True
         self.draw(screen)
