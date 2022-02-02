@@ -1,5 +1,9 @@
+from config import symbols
+
+
 class TicTacToe:
     """A full tic tac toe game class"""
+
     def __init__(self, players: int = 2):
         """
         :param players: The number of players in the game. Default 2
@@ -83,7 +87,8 @@ class TicTacToe:
         Returns a string printing the entire board
         :rtype: str
         """
-        board_str = "".join([f"\t{j + 1}\t" for j in range(len(self.board[0]))]) + "\n"
+        board_str = "".join(
+            [f"\t{j + 1}\t" for j in range(len(self.board[0]))]) + "\n"
         for i in range(len(self.board)):
             board_str += f"{i + 1}"
             for j in range(len(self.board[i])):
@@ -146,32 +151,57 @@ class TicTacToe:
             # move is possible
             if self.board[position[0] - 1][position[1] - 1] is not None:
                 print("There is already someone there")
+                return False
             else:
                 # move is legal
-                self.board[position[0] - 1][position[1] - 1] = self.get_symbol(player)
+                self.board[position[0] - 1][position[1] -
+                                            1] = self.get_symbol(player)
                 self.moves.append(position)
                 self.win()
                 self.turn += 1
                 valid = True
         else:
-            print(f"The bounds for this board are ({len(self.board)}, {len(self.board[0])})")
+            print(
+                f"The bounds for this board are ({len(self.board)}, {len(self.board[0])})")
         return valid
 
     def restart(self):
         self.__init__(self.players)
+
+    def get_current_player(self):
+        return self.turn % self.players + 1
 
     @staticmethod
     def new_board(size: int) -> list:
         return [[None for i in range(size)] for j in range(size)]
 
     @staticmethod
-    def get_symbol(player: int=None):
-        """Define symbols for players here. If not here just uses the number (what player: player does)"""
-        return {player: player,
-                False: "oops, the winner was false",
-                1: "X",
-                2: "O"
-                }[player]
+    def get_symbol(player: int, char: str = None):
+        # """Define symbols for players here. If not here just uses the number (what player: player does)"""
+        "Returns the symbol for a given player"
+        if not symbols.get(player):
+            return False
+        return symbols[player]
+        # return {player: player,
+        #         False: "oops, the winner was false",
+        #         1: "X",
+        #         2: "O",
+        #         3: "R",
+        #         }[player]
+
+    @staticmethod
+    def get_number(symbol: str):
+        """Returns the number belonging to a symbol"""
+        for number in symbols:
+            if (symbols[number] == symbol):
+                return number
+        return 0
+        # return {player: player,
+        #         False: "oops, the winner was false",
+        #         1: "X",
+        #         2: "O",
+        #         3: "R",
+        #         }[player]
 
 
 if __name__ == '__main__':

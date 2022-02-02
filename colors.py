@@ -1,6 +1,7 @@
 import pygame
 
 light_colors = {
+
     "background_color": pygame.Color("#fbf1f2"),
     "tile_color": pygame.Color("#cccccc"),
     1: pygame.Color("#1d2021"),  # x color
