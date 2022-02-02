@@ -42,6 +42,7 @@ class TitleState(BaseState):
         return screen
 
     def start_up(self, persist, screen):
+        pygame.mixer.music.set_volume(1)
         self.persist = persist
         screen_width, screen_height = screen.get_width(), screen.get_height()
         self.GAME_SIZE = int(min(screen_width, screen_height) // SCREEN_GAME_RATIO)
