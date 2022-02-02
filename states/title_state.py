@@ -34,9 +34,6 @@ class TitleState(BaseState):
         self.font = 0
         self.liler_font = 0
 
-    def cleanup(self):
-        pygame.mixer.music.stop()
-
     def resize(self, height, width):
         self.GAME_SIZE = int(min(width, height) // SCREEN_GAME_RATIO)
         self.font = pygame.font.Font('freesansbold.ttf', self.GAME_SIZE // 5)
@@ -60,7 +57,6 @@ class TitleState(BaseState):
         self.startButton.draw(screen, self.persist["colors"], self.liler_font, (screen.get_width() // 2, screen.get_height() // 2))
 
     def update(self, screen):
-        #pygame.mixer.Sound("assets/sounds/into.wav").play()
         if self.startButton.clicked():
             self.done = True
             self.next = "game"

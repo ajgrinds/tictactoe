@@ -4,6 +4,7 @@ from states.win_state import WinState
 from states.title_state import TitleState
 from colors import dark_colors
 from config import all_symbols
+import random
 
 pygame.init()
 pygame.mixer.init()
@@ -45,6 +46,14 @@ class Button(pygame.sprite.Sprite):
 
 
 def main():
+    names = ["moose", "energy", "boss", "lounge"]
+    random.shuffle(names)
+    pygame.mixer.music.load(f"assets/sounds/{names[0]}.wav")
+    for name in names:
+        pygame.mixer.music.queue(f"assets/sounds/{name}.wav")
+
+    pygame.mixer.music.play()
+
     print("Sorry, I havent made this part digital yet...\nAlso volume warning.")
     while not (num_players := input("How many players would you like?\n>>> ").strip()).isdigit():
         num_players = int(num_players)
