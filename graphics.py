@@ -26,11 +26,12 @@ def random_symbol() -> str:
 
 
 class Button:
-    def __init__(self, coords, image):
+    def __init__(self, coords, image, scale=None):
         super().__init__()
-        self.image = image
+        self.img = image
+        self.image = pygame.transform.scale(self.img, scale)
         self.rect = self.image.get_rect()
-        self.rect.topleft = coords
+        self.rect.center = coords
         self.surface = pygame.Surface(
             self.rect.size, pygame.SRCALPHA).convert_alpha()
         self.surface.blit(self.image, (0, 0))
@@ -44,6 +45,10 @@ class Button:
         self.click = self.rect.collidepoint(
             pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]
         return self.click
+
+    def resize(self, scale, coords):
+        self.image = pygame.transform.scale(self.img, scale)
+        self.rect.center = coords
 
 
 def main():
@@ -75,7 +80,7 @@ def main():
     restart_img = pygame.transform.scale(pygame.image.load(
         "assets/images/restart.png"), (square_size // 10, square_size // 10))
     restart_button = Button(
-        (square_size * 1.05, square_size * 0.15), restart_img)
+        (game_offsetx + GAME_SIZE // len(game.board) * 0.5, 30), restart_img, (GAME_SIZE // len(game.board) // 10, GAME_SIZE // len(game.board) // 10))
 
     # event catcher loop
     while not SHUTDOWN:
@@ -118,6 +123,11 @@ def main():
                 print(GAME_WIDTH)
                 screen = pygame.display.set_mode(
                     (event.w, event.h), pygame.RESIZABLE)
+                font = pygame.font.Font('freesansbold.ttf', GAME_SIZE // len(game.board) - 10)
+                lil_font = pygame.font.Font('freesansbold.ttf', GAME_SIZE // len(game.board) // 3)
+                liler_font = pygame.font.Font('freesansbold.ttf', GAME_SIZE // len(game.board) // 5)
+                dark_mode_button.resize((GAME_SIZE // len(game.board) // 8, GAME_SIZE // len(game.board) // 8), (game_offsetx + GAME_SIZE // len(game.board) * 0.7, 30))
+                restart_button.resize((GAME_SIZE // len(game.board) // 10, GAME_SIZE // len(game.board) // 10), (game_offsetx + GAME_SIZE // len(game.board) * 0.5, 30))
 
         # board initializer
         pygame.draw.rect(screen, colors["background_color"], pygame.Rect(
@@ -154,11 +164,11 @@ def main():
             winner_label = font.render(
                 winner, True, colors["{}_color".format(winner.lower())])
             winner_label_rect = winner_label.get_rect(
-                center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-            screen.blit(winner_label, winner_label_rect)
-            text = lil_font.render("won the game!", True, colors["o_color"])
-            text_rect = text.get_rect(
                 center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3))
+            screen.blit(winner_label, winner_label_rect)
+            text = lil_font.render("won the game!", True, colors[game.turn % game.players + 1])
+            text_rect = text.get_rect(
+                center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
             screen.blit(text, text_rect)
 
         # add ui buttons
