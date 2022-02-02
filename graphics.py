@@ -45,7 +45,7 @@ class Button(pygame.sprite.Sprite):
 
 
 def main():
-    print("Sorry, I havent made this part digital yet...")
+    print("Sorry, I havent made this part digital yet...\nAlso volume warning.")
     while not (num_players := input("How many players would you like?\n>>> ").strip()).isdigit():
         num_players = int(num_players)
         if 0 > num_players or num_players > len(all_symbols):
