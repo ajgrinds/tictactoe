@@ -46,13 +46,13 @@ class Button(pygame.sprite.Sprite):
 
 def main():
     print("Sorry, I havent made this part digital yet...")
-    while not (num_players := input("How many players would you like?\n>>> ")).isdigit():
+    while not (num_players := input("How many players would you like?\n>>> ").strip()).isdigit():
         num_players = int(num_players)
         if 0 > num_players or num_players > len(all_symbols):
             print("I thought of everything... can't fool me")
         else:
             print("Come on now, already trying to break it. Try again.")
-    print("Okay, look for the pygame window")
+    print("Okay, look for the pygame window. Im not sure why it doesnt auto bring it to the front.")
 
     # game config variables
     height = 1000
