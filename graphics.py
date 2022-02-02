@@ -53,6 +53,7 @@ def main():
         pygame.mixer.music.queue(f"assets/sounds/{name}.wav")
 
     pygame.mixer.music.play()
+    pygame.mixer.music.set_volume(0.1)
 
     print("Sorry, I havent made this part digital yet...\nAlso volume warning.")
     while not (num_players := input("How many players would you like?\n>>> ").strip()).isdigit():
